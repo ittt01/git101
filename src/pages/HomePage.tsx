@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
+import { useToast } from '../hooks/useToast'
 import { products } from '../data/products'
 
 const categories = ['All', ...new Set(products.map((p) => p.category))]
@@ -8,12 +9,18 @@ const categories = ['All', ...new Set(products.map((p) => p.category))]
 export function HomePage() {
   const [activeCategory, setActiveCategory] = useState('All')
   const { addToCart } = useCart()
+  const { showToast } = useToast()
   const navigate = useNavigate()
 
   const filteredProducts =
     activeCategory === 'All'
       ? products
       : products.filter((p) => p.category === activeCategory)
+
+  const handleAddToCart = (product: typeof products[0]) => {
+    addToCart(product)
+    showToast('Item added to cart!', 'success')
+  }
 
   return (
     <div className="page">
@@ -63,7 +70,7 @@ export function HomePage() {
                     className="btn-secondary"
                     onClick={(e) => {
                       e.stopPropagation()
-                      addToCart(product)
+                      handleAddToCart(product)
                     }}
                   >
                     Add

@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
+import { useToast } from '../hooks/useToast';
 import { products } from '../data/products';
 
 function StarRating({ rating }: { rating: number }) {
@@ -21,6 +22,7 @@ export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { showToast } = useToast();
 
   const product = products.find((p) => p.id === Number(id));
 
@@ -44,6 +46,7 @@ export function ProductDetailPage() {
 
   const handleAddToCart = () => {
     addToCart(product);
+    showToast('Item added to cart!', 'success');
   };
 
   return (
